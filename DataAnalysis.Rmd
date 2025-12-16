@@ -152,9 +152,14 @@ mpg %>%
 mpg %>% 
   filter(manufacturer == "dodge" | manufacturer == "ford")
 
+# Can do multiple variables
+mpg %>%
+  filter(manufacturer == "dodge", year < 2008)
+
 # This won't work, because a manufacturer cannot be both Dodge and Ford
 mpg %>% 
   filter(manufacturer == "dodge", manufacturer == "ford")
+table(mpg$manufacturer, mpg$year)
 
 # Here is a shorthand. This will select every row where manufacturer is one of the
 # values in the c() function
@@ -177,7 +182,7 @@ mpg %>%
 
 # We can select certain variables by name
 mpg %>%
-  select(model, displ, hwy)
+  dplyr::select(model, displ, hwy)
 
 # We can select all but named variables
 mpg %>%
@@ -214,7 +219,8 @@ sml_flights %>%
 
 # If you only want to keep the new variable, use transmute()
 sml_flights %>%
-  transmute(gain = dep_delay - arr_delay, 
+  transmute(year = year, 
+            gain = dep_delay - arr_delay, 
          hours = air_time / 60, 
          gain_per_hour = gain / hours)
 
@@ -271,7 +277,8 @@ flights %>%
               hour > 18 ~ "late"
             )) %>%
   group_by(year, month, day, time_category) %>%
-  summarise(n_cat = n())
+  summarise(n_cat = n()) %>% 
+  filter(time_category == "early")
 
 ```
 
